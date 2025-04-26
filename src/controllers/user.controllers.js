@@ -1,5 +1,5 @@
 const catchError = require("../utils/catchError");
-const user = require("../models/User");
+const bcrypt = require('bcrypt');
 const {
   getAllServices,
   createServices,
@@ -14,7 +14,10 @@ const getAll = catchError(async (req, res) => {
 });
 
 const create = catchError(async (req, res) => {
-  const result = await createServices(req.body);
+  const { password } = req.body;
+  const hashPassword = await bcrypt.hash(password, 10)
+  const body = { ...req.body, password: hashPassword }
+  const result = await createServices(body);
   return res.status(201).json(result);
 });
 
@@ -46,3 +49,7 @@ module.exports = {
   remove,
   update,
 };
+
+
+
+
