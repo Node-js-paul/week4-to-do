@@ -14,9 +14,7 @@ const getAll = catchError(async (req, res) => {
 });
 
 const create = catchError(async (req, res) => {
-  const { password } = req.body;
-  const hashPassword = await bcrypt.hash(password, 10)
-  const body = { ...req.body, password: hashPassword }
+  const body = { ...req.body, password: req.passwordHash }
   const result = await createServices(body);
   return res.status(201).json(result);
 });

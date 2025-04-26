@@ -1,11 +1,12 @@
 const { getAll, create, getOne, remove, update } = require('../../controllers/user.controllers');
 const express = require('express');
+const hash = require('../../middlewares/hash.middlewares');
 
 const routerUser = express.Router();
 
 routerUser.route('/')
     .get(getAll)
-    .post(create);
+    .post(hash, create);
 
 routerUser.route('/:id')
     .get(getOne)
