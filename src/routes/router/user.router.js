@@ -8,12 +8,13 @@ const {
 } = require("../../controllers/user.controllers");
 const express = require("express");
 const hash = require("../../middlewares/hash.middlewares");
+const credentials = require("../../middlewares/login.middlewares");
 
 const routerUser = express.Router();
 
 routerUser.route("/").get(getAll).post(hash, create);
 
-routerUser.route("/login").post(login);
+routerUser.route("/login").post(credentials, login);
 
 routerUser.route("/:id").get(getOne).delete(remove).put(update);
 

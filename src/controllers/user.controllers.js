@@ -6,8 +6,11 @@ const {
   getOneServices,
   removeServices,
   updateServices,
+  getUserServices,
 } = require("../services/user.services");
 const { json } = require("sequelize");
+const User = require("../models/User");
+const { error } = require("shelljs");
 
 const getAll = catchError(async (req, res) => {
   console.log("📌 4)-----ID recibido en el controlador:", req.params.id);
@@ -58,7 +61,7 @@ const update = catchError(async (req, res) => {
 });
 
 const login = catchError(async (req, res) => {
-  return res.json("hi, this is my login");
+  return res.json({ user });
 });
 
 module.exports = {

@@ -23,10 +23,16 @@ const removeServices = async (id) => {
 const updateServices = async (id, user) => {
   return await User.update(user, { where: { id }, returning: true });
 };
+
+const getUserServices = async (email) => {
+  return await User.findOne({ where: { email } }); // Convertimos a número por seguridad
+};
+
 module.exports = {
   getAllServices,
   createServices,
   getOneServices,
   removeServices,
   updateServices,
+  getUserServices,
 };
