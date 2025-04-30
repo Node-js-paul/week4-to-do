@@ -1,5 +1,5 @@
 const catchError = require("../utils/catchError");
-const user = require("../models/User");
+const bcrypt = require("bcrypt");
 const {
   getAllServices,
   createServices,
@@ -7,6 +7,7 @@ const {
   removeServices,
   updateServices,
 } = require("../services/user.services");
+const { json } = require("sequelize");
 
 const getAll = catchError(async (req, res) => {
   console.log("📌 4)-----ID recibido en el controlador:", req.params.id);
@@ -16,7 +17,8 @@ const getAll = catchError(async (req, res) => {
 });
 
 const create = catchError(async (req, res) => {
-  const result = await createServices(req.body);
+  const body = { ...req.body, password: req.passwordHash };
+  const result = await createServices(body);
   return res.status(201).json(result);
 });
 
@@ -56,12 +58,7 @@ const update = catchError(async (req, res) => {
 });
 
 const login = catchError(async (req, res) => {
-  const { email, password } = req.body;
-
-  return res.json({
-    email,
-    password,
-  });
+  return res.json("hi, this is my login");
 });
 
 module.exports = {
