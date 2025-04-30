@@ -8,8 +8,12 @@ const getAllServices = async () => {
 const createServices = async (user) => {
   return await User.create(user);
 };
+// const getOneServices = async (id) => {
+//   return await User.findByPk(id);
+// };
 const getOneServices = async (id) => {
-  return await User.findByPk(id);
+  const result = await User.findByPk(Number(id)); // Convertimos a número por seguridad
+  return result;
 };
 
 const removeServices = async (id) => {
