@@ -1,29 +1,39 @@
-// este es el middlewares para el login para poder verificar si la contraseña y el email es correcto ono
+// Middleware para el login: verifica si el email y la contraseña son correctos.
 const bcrypt = require("bcrypt");
 const { getUserServices } = require("../services/user.services");
 
 const credentials = async (req, res, next) => {
-  const { email, password } = req.body; //desestructuro el res.bod que vidne el cliente en las claves
-  const user = await getUserServices(email); //aqui hace la consulta a la base de datos
-  //retornar mensaje de error, Esta es la validacion del email
+  // Desestructuramos `req.body` para obtener los datos enviados por el cliente.
+  const { email, password } = req.body;
+
+  // Se consulta a la base de datos para verificar si el usuario existe.
+  const user = await getUserServices(email);
+
+  // Si el usuario no existe, enviamos una respuesta de error 401 (No autorizado).
   if (!user)
     return res.status(401).json({
       error:
-        "Invalid credentials resp paul zaruma -- user, Email invalido o no exist",
+        "Invalid credentials resp paul zaruma -- user, Email inválido o no existe",
     });
-  //aqui retorna el res pero en un archivo json
 
-  //validacion del password
-  //este es el uso del COMPARE compara dos incriptaciones si son las mismas retrona un valor truthy y no son iguales retorna un valor falsy
-  const isValid = await bcrypt.compare(password, user.password); //bcrypt es una libreria 1: el primer parametro recibe la contraseña sin incriptar, 2: obtiene la cotrasña incripitada
+  // Validación de la contraseña:
+  // `bcrypt.compare()` compara la contraseña ingresada con la encriptada en la base de datos.
+  // Devuelve `true` si coinciden, o `false` si son diferentes.
+  const isValid = await bcrypt.compare(password, user.password);
+
+  // Si la contraseña es incorrecta, enviamos una respuesta de error 401.
   if (!isValid)
     return res.status(401).json({
       error:
-        "Invalid credentials resp paul zaruma -- isValid, la contraseña es incorecta",
+        "Invalid credentials resp paul zaruma -- isValid, la contraseña es incorrecta",
     });
 
-  req.userLogin = user; // AQUI SE ASIGNA el nuevo valor al req que viene con los datos del cliente
-  next(); // esto es para pasar al siguiente middleware en el router
+  // Asignamos el usuario validado al `req` para que esté disponible en los siguientes middlewares.
+  req.userLogin = user;
+
+  // Pasamos la ejecución al siguiente middleware en la ruta.
+  next();
 };
 
+// Exportamos el middleware para usarlo en el router.
 module.exports = credentials;
