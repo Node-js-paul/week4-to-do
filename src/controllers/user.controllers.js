@@ -71,12 +71,16 @@ const login = catchError(async (req, res) => {
   //trabajamos con jwt
   const token = jwt.sign(
     { user }, //recibe el usuario que va acodificar en formato de objeto
-    process.env.TOKEN_SECRET,
-    { expiresIn: "5M" } //ESTO ES opcional para poder poner un tiempo de expiracion del token obliga al usuario a poder logiarse pasado un tiempo
+    process.env.TOKEN_SECRET
+    // { expiresIn: "5M" } //ESTO ES opcional para poder poner un tiempo de expiracion del token obliga al usuario a poder logiarse pasado un tiempo
   );
   //COMANDO PARA CREAR UN TOKEN EN NODE-CMD
   // require('crypto').randomBytes(64).toString('hex')
   return res.json({ user, token });
+});
+
+const logged = catchError(async (req, res) => {
+  return res.json(req.user);
 });
 
 module.exports = {
@@ -86,4 +90,5 @@ module.exports = {
   remove,
   update,
   login,
+  logged,
 };
