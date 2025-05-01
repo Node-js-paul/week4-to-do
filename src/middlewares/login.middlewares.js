@@ -1,16 +1,29 @@
+// este es el middlewares para el login para poder verificar si la contraseña y el email es correcto ono
+const bcrypt = require("bcrypt");
+const { getUserServices } = require("../services/user.services");
+
 const credentials = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body; //desestructuro el res.bod que vidne el cliente en las claves
+  const user = await getUserServices(email); //aqui hace la consulta a la base de datos
+  //retornar mensaje de error, Esta es la validacion del email
+  if (!user)
+    return res.status(401).json({
+      error:
+        "Invalid credentials resp paul zaruma -- user, Email invalido o no exist",
+    });
+  //aqui retorna el res pero en un archivo json
 
-  const user = await getUserServices(email);
-  if (!user) return res.status(401).json({ error: "invalid credentials pz" }); //aqui se le enviar un erro de las claves incorrectas 401 significa que no tiene autirizacion
-
-  //USO DE la libreria bcrypt para segurirdad de contraseñas
-  //recibe dos parametros la contraseña y la contraseña incliptada
-  const isValid = await bcrypt.compare(password, user.password);
+  //validacion del password
+  //este es el uso del COMPARE compara dos incriptaciones si son las mismas retrona un valor truthy y no son iguales retorna un valor falsy
+  const isValid = await bcrypt.compare(password, user.password); //bcrypt es una libreria 1: el primer parametro recibe la contraseña sin incriptar, 2: obtiene la cotrasña incripitada
   if (!isValid)
-    return res.status(401).json({ error: "invalid credentials pz" }); //aqui se le enviar un erro de las claves incorrectas 401 significa que no tiene autirizacion
+    return res.status(401).json({
+      error:
+        "Invalid credentials resp paul zaruma -- isValid, la contraseña es incorecta",
+    });
 
-  req.userLogin = user;
+  req.userLogin = user; // AQUI SE ASIGNA el nuevo valor al req que viene con los datos del cliente
+  next(); // esto es para pasar al siguiente middleware en el router
 };
 
 module.exports = credentials;

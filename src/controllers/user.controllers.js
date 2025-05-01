@@ -61,6 +61,11 @@ const update = catchError(async (req, res) => {
 });
 
 const login = catchError(async (req, res) => {
+  const user = req.userLogin;
+  if (!user)
+    return res.status(401).json({
+      error: "Invalid credentials",
+    });
   return res.json({ user });
 });
 

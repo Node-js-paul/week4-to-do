@@ -7,8 +7,8 @@ const {
   login,
 } = require("../../controllers/user.controllers");
 const express = require("express");
-const hash = require("../../middlewares/hash.middlewares");
 const credentials = require("../../middlewares/login.middlewares");
+const hash = require("../../middlewares/hash.middlewares");
 
 const routerUser = express.Router();
 

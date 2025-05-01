@@ -25,6 +25,8 @@ const updateServices = async (id, user) => {
 };
 
 const getUserServices = async (email) => {
+  //los servicion son para poder comunicarse con la base de datos pero desde otro archivo en palabras msa sencillas
+
   return await User.findOne({ where: { email } }); // Convertimos a número por seguridad
 };
 
