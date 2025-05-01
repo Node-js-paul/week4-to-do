@@ -11,6 +11,7 @@ const {
 const { json } = require("sequelize");
 const User = require("../models/User");
 const { error } = require("shelljs");
+const jwt = require("jsonwebtoken");
 
 const getAll = catchError(async (req, res) => {
   console.log("📌 4)-----ID recibido en el controlador:", req.params.id);
@@ -66,7 +67,16 @@ const login = catchError(async (req, res) => {
     return res.status(401).json({
       error: "Invalid credentials",
     });
-  return res.json({ user });
+
+  //trabajamos con jwt
+  const token = jwt.sign(
+    { user }, //recibe el usuario que va acodificar en formato de objeto
+    process.env.TOKEN_SECRET,
+    { expiresIn: "5M" } //ESTO ES opcional para poder poner un tiempo de expiracion del token obliga al usuario a poder logiarse pasado un tiempo
+  );
+  //COMANDO PARA CREAR UN TOKEN EN NODE-CMD
+  // require('crypto').randomBytes(64).toString('hex')
+  return res.json({ user, token });
 });
 
 module.exports = {
