@@ -10,7 +10,9 @@ const {
 const catchError = require("../utils/catchError");
 
 const getAll = catchError(async (req, res) => {
-  const results = await getAllServices();
+  const userId = req.user.id;
+  console.log(userId, "esto es en el getall");
+  const results = await getAllServices(userId);
   return res.json(results);
 });
 
@@ -24,6 +26,7 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { id } = req.params;
+  console.log(res.params, "esto es el getOne del todo");
   const result = await getOneServices(id);
   if (!result) res.sendStatus(404);
   return res.json(result);
@@ -39,6 +42,7 @@ const remove = catchError(async (req, res) => {
 const update = catchError(async (req, res) => {
   const { id } = req.params;
   const result = await updateServices(id, res.body);
+  console.log("esto es el controllers , ", id, res.body);
   if (result[0] === 0) return res.sendStatus(404);
   return res.json(result[1][0]);
 });

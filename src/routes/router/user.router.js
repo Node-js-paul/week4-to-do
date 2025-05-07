@@ -14,7 +14,7 @@ const { verifyJWT } = require("../../middlewares/verifyJWT");
 //el  middleware VERIFYJWT es para hacer los endpoints de publicos a privados
 const routerUser = express.Router();
 
-routerUser.route("/").get(verifyJWT, getAll).post(hash, create); //🔐 todas estas rutas estan en privado
+routerUser.route("/").get(getAll).post(hash, create); //🔐 todas estas rutas estan en privado
 
 routerUser.route("/login").post(credentials, login);
 routerUser.route("/me").get(verifyJWT, logged); //🔐 todas estas rutas estan en privado

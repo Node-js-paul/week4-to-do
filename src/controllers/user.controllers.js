@@ -1,5 +1,4 @@
 const catchError = require("../utils/catchError");
-const bcrypt = require("bcrypt");
 const {
   getAllServices,
   createServices,
@@ -8,14 +7,9 @@ const {
   updateServices,
   getUserServices,
 } = require("../services/user.services");
-const { json } = require("sequelize");
-const User = require("../models/User");
-const { error } = require("shelljs");
 const jwt = require("jsonwebtoken");
 
 const getAll = catchError(async (req, res) => {
-  console.log("📌 4)-----ID recibido en el controlador:", req.params.id);
-
   const results = await getAllServices();
   return res.json(results);
 });
@@ -35,13 +29,8 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { id } = req.params;
-  console.log("📌 ID recibido en la solicitud:", id);
-
   const result = await getOneServices(id);
-  console.log("🔍 Resultado de la consulta:", result);
-
   if (!result) {
-    console.log("🚨 Usuario no encontrado. Enviando 404.");
     return res.sendStatus(404);
   }
 
@@ -60,7 +49,7 @@ const update = catchError(async (req, res) => {
   if (result[0] === 0) return res.sendStatus(404);
   return res.json(result[1][0]);
 });
-
+//// esto es para acceder al usuario
 const login = catchError(async (req, res) => {
   const user = req.userLogin;
   if (!user)
@@ -78,8 +67,9 @@ const login = catchError(async (req, res) => {
   // require('crypto').randomBytes(64).toString('hex')
   return res.json({ user, token });
 });
-
+// esto es solo para hacer la consulta y verficar cual es el usuario que esta loggiado
 const logged = catchError(async (req, res) => {
+  console.log("valor : >>>>> \n", req.user);
   return res.json(req.user);
 });
 
